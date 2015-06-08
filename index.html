@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>ADIS</title>
+	<link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<script>
+
+		/**
+		 * AngularJS dependency injections sorter
+		 * yevhenii.chubar <jenegua@gmail.com>
+		 */
+		(function() {
+			'use strict';
+
+			var dom, ignoreDollarSign = false;
+
+			init();
+
+			function init() {
+				document.addEventListener("DOMContentLoaded", bindHandlers);
+			}
+
+			function bindHandlers() {
+				dom = {
+					input: document.getElementById('input'),
+					output1: document.getElementById('output1'),
+					output2: document.getElementById('output2'),
+					checkbox: document.getElementById('ignore-checkbox')
+				};
+
+				dom.input.addEventListener('keyup', formatInput);
+				dom.checkbox.addEventListener('click', switchType);
+			}
+
+			function switchType() {
+				ignoreDollarSign = dom.checkbox.checked;
+				formatInput();
+			}
+
+			function formatInput() {
+				var val = dom.input.value;
+				val = val.replace(/[^A-Z,$\d_]/gi, '').split(',');
+				val = val.filter(function(n){ return n != '' });
+
+				if (val.length) {
+					outputData(val);
+
+				} else {
+					dom.output1.innerHTML = dom.output2.innerHTML = 'Incorrect input';
+				}
+			}
+
+			function outputData(val) {
+				if (ignoreDollarSign) {
+					val = val.sort(function (a, b) {
+						a = a.replace('$', '');
+						b = b.replace('$', '');
+						if (a < b) { return -1; }
+						if (a > b) { return 1; }
+						return 0;
+					});
+
+				} else {
+					val = val.sort();
+				}
+
+				dom.output1.innerHTML = "DI.$inject = ['" + val.join("', '") + "'];";
+				dom.output2.innerHTML = 'function DI (' + val.join(', ') + ') {};';
+			}
+		}());
+	</script>
+
+</head>
+<body>
+
+<div class="container">
+	<h2 class="page-header">AngularJS dependency injections sorter</h2>
+
+	<div class="conditions">
+		<input id="ignore-checkbox" type="checkbox" value="0" name="type" />
+		<label for="ignore-checkbox">Ignore $ sign</label>
+	</div>
+	<hr />
+	<div class="form-group">
+		<label class="control-label" for="input">Paste your string here</label>
+		<textarea rows="5" class="form-control" id="input" placeholder="Input string..."></textarea>
+	</div>
+	<pre id="output1"></pre>
+	<pre id="output2"></pre>
+</div>
+
+</body>
+</html>
