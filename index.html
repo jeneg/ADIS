@@ -3,7 +3,26 @@
 <head lang="en">
 	<meta charset="UTF-8">
 	<title>ADIS</title>
-	<link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<style>
+		/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+		html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+		body {
+			color: #EEE;
+			background-color: #1E1E1E;
+			font-family: 'Consolas', 'Lucida Console', Monaco, monospace;
+		}
+
+		.container {
+			width: 90%;
+			margin: 0 auto;
+		}
+
+		.page-header {
+			font-size: 2em;
+			color: #EC7600;
+		}
+	</style>
 	<script>
 
 		/**
@@ -13,12 +32,14 @@
 		(function() {
 			'use strict';
 
-			var dom, ignoreDollarSign = false;
+			var dom,
+				ignoreDollarSign = false,
+				ignoreCase = false;
 
 			init();
 
 			function init() {
-				document.addEventListener("DOMContentLoaded", bindHandlers);
+				document.addEventListener('DOMContentLoaded', bindHandlers);
 			}
 
 			function bindHandlers() {
@@ -26,15 +47,18 @@
 					input: document.getElementById('input'),
 					output1: document.getElementById('output1'),
 					output2: document.getElementById('output2'),
-					checkbox: document.getElementById('ignore-checkbox')
+					dollarCheckbox: document.getElementById('ignore-dollar'),
+					caseCheckbox: document.getElementById('ignore-case')
 				};
 
 				dom.input.addEventListener('keyup', formatInput);
-				dom.checkbox.addEventListener('click', switchType);
+				dom.dollarCheckbox.addEventListener('click', switchType);
+				dom.caseCheckbox.addEventListener('click', switchType);
 			}
 
 			function switchType() {
-				ignoreDollarSign = dom.checkbox.checked;
+				ignoreDollarSign = dom.dollarCheckbox.checked;
+				ignoreCase = dom.caseCheckbox.checked;
 				formatInput();
 			}
 
@@ -78,16 +102,23 @@
 	<h2 class="page-header">AngularJS dependency injections sorter</h2>
 
 	<div class="conditions">
-		<input id="ignore-checkbox" type="checkbox" value="0" name="type" />
-		<label for="ignore-checkbox">Ignore $ sign</label>
+		<div>
+			<input id="ignore-dollar" type="checkbox" value="0" name="type" />
+			<label for="ignore-dollar">Ignore $ sign</label>
+		</div>
+		<div>
+			<input id="ignore-case" type="checkbox" value="0" name="type" />
+			<label for="ignore-case">Ignore case</label>
+		</div>
 	</div>
-	<hr />
 	<div class="form-group">
 		<label class="control-label" for="input">Paste your string here</label>
 		<textarea rows="5" class="form-control" id="input" placeholder="Input string..."></textarea>
 	</div>
-	<pre id="output1"></pre>
-	<pre id="output2"></pre>
+	<div class="row">
+		<pre class="" id="output1"></pre>
+		<pre id="output2"></pre>
+	</div>
 </div>
 
 </body>
